@@ -1,0 +1,7 @@
+---
+- name: change admin login password config
+  command: "chage -M 180 -m 2 -W 7  {{ ansible_ssh_user }}"
+
+- name: install proxy
+  command: "sh /tmp/proxy_script.sh"
+  ignore_errors: True

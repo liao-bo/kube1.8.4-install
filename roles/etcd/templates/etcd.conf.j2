@@ -1,0 +1,9 @@
+name: "{{ ansible_hostname }}"
+data-dir: "/opt/etcd"
+initial-advertise-peer-urls: "http://{{ ansible_host }}:2380"
+listen-peer-urls: "http://0.0.0.0:2380"
+advertise-client-urls: "http://{{ ansible_host }}:2379"
+listen-client-urls: "http://0.0.0.0:2379"
+advertise-client-urls: "http://{{ ansible_host }}:2379"
+{#initial-cluster: "{{ etcd_initial_cluster }}"#}
+{#initial-cluster-token: "etcd-cluster"#}

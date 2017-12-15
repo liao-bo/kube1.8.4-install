@@ -1,0 +1,19 @@
+---
+- name: create /lib/systemd/system/calico-node.service
+  template:
+    src: calico-node.service
+    dest: /lib/systemd/system/calico-node.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: start calico-node
+  service: 
+    name: calico-node
+    state: started 
+    enabled: yes
+  async: 10

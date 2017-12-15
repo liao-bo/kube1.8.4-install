@@ -1,0 +1,37 @@
+---
+- name: check docker
+  command: "command -v docker"
+  register: command_result
+  ignore_errors: True
+
+- name: install docker
+  shell: "cd /root/proxychains-master/src && proxychains4 yum -y install docker"
+  when: command_result.rc == 1 
+
+- name: cgroupdriver(systemd ==> cgroupfs)
+  replace:
+    path: /lib/systemd/system/docker.service
+    regexp: '--exec-opt native.cgroupdriver=cgroupfs'
+    replace: '--exec-opt native.cgroupdriver=systemd'
+
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: add harbor self-CA
+  template:
+    src: root.crt
+    dest: /tmp/root.crt
+  notify:
+    - add CA to trust lists
+    - restart docker
+
+
+#- name: add insecure-mirror
+  #template:
+    #src: docker.j2
+    #dest: /etc/sysconfig/docker
+    #owner: root
+    #group: root
+    #mode: 0644
+  #notify: restart docker

@@ -1,0 +1,22 @@
+---
+- hosts: 
+    - kubernetes-master
+    - kubernetes-node
+  roles:
+    - calico-node
+  vars_files: 
+    - dev/group_vars/all
+
+- hosts: 
+    - kubernetes-master
+  roles:
+    - calico-k8s-network
+  vars_files: 
+    - dev/group_vars/all
+
+- hosts: 
+    - kubernetes-node
+  roles:
+    - calico-cni
+  vars_files: 
+    - dev/group_vars/all

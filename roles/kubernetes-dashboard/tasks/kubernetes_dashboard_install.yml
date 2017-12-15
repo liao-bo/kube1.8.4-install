@@ -1,0 +1,23 @@
+---
+- name: create k8s-dashboard yaml dir
+  file:
+    path: /var/tmp/k8s-dashboard
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: sync k8s-dashboard yaml
+  template: 
+    src: "{{ item.src }}"
+    dest: /var/tmp/k8s-dashboard/{{ item.dest }}
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { src: 'heapster.yaml', dest: 'heapster.yaml' }
+    - { src: 'influxdb.yaml', dest: 'influxdb.yaml' }
+    - { src: 'grafana.yaml', dest: 'grafana.yaml' }
+    - { src: 'heapster-rbac.yaml', dest: 'heapster-rbac.yaml' }
+    - { src: 'kubernetes-dashboard.yaml', dest: 'kubernetes-dashboard.yaml' }
+  notify: apply k8s-dashboard

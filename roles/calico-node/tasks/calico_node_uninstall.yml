@@ -1,0 +1,16 @@
+---
+- name: stop calico-node
+  service: 
+    name: calico-node
+    state: stopped
+    enabled: no
+  ignore_errors: true
+
+- name: remove calico-node directories
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /lib/systemd/system/calico-node.service
+    - /var/run/calico
+    - /var/log/calico

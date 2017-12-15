@@ -1,0 +1,21 @@
+---
+- name: check calico-k8s-network controller 
+  shell: calicoctl get ipPool {{ calico_ipv4pool_cidr }}
+  register: policy_result
+  ignore_errors: true
+
+- debug:
+    msg: "{{ policy_result }}"
+
+- name: delete calico-k8s-network
+  shell: calicoctl delete ipPool {{ calico_ipv4pool_cidr }}
+  when: policy_result.rc == 0
+  ignore_errors: true
+
+- name: remove calicoctl
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /usr/bin/calicoctl
+    - /var/tmp/calico_ipv4pool_cidr.yaml

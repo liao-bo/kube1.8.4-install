@@ -1,0 +1,16 @@
+---
+- name: fetch kubectl binary to PATH(/usr/bin)
+  get_url:
+    url: "{{ kubernetes_binary_url }}/kubectl"
+    dest: /usr/bin
+    owner: root
+    group: root
+    mode: 0755
+
+- name: kubectl config
+  template:
+    src: kubeconfig.j2
+    dest: /home/{{ ansible_ssh_user }}/.kube/config
+    owner: root
+    group: root
+    mode: 0755

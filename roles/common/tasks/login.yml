@@ -1,0 +1,10 @@
+---
+- name: new user login password config
+  template: 
+    src: login_pw_conf.j2
+    dest: /etc/login.defs
+    owner: root 
+    group: root 
+    mode: 0640
+  notify:
+    - change admin login password config

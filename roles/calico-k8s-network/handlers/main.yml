@@ -1,0 +1,3 @@
+---
+- name: add calico-k8s-network
+  shell: calicoctl apply -f /var/tmp/calico_ipv4pool_cidr.yaml

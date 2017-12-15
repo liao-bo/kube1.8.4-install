@@ -1,0 +1,8 @@
+---
+- hosts: 
+    - kubernetes-master
+    - kubernetes-node
+  roles:
+    - ntp
+  vars_files: 
+    - dev/group_vars/all

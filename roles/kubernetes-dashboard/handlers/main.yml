@@ -1,0 +1,9 @@
+---
+- name: apply k8s-dashboard
+  shell: kubectl apply -f /var/tmp/k8s-dashboard/{{ item }}
+  with_items:
+    - heapster.yaml
+    - influxdb.yaml
+    - grafana.yaml
+    - heapster-rbac.yaml
+    - kubernetes-dashboard.yaml

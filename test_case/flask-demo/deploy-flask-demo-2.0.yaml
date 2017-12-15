@@ -1,0 +1,72 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: deploy-flask-demo
+  labels:
+     name: deploy-flask-demo
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      name: deploy-flask-demo
+    #name: deploy-flask-demo
+  template:
+    metadata:
+      labels:
+          name: deploy-flask-demo
+    spec:
+        volumes:
+        - name: data
+          emptyDir: {}
+        containers:
+        - image: 192.168.130.1:5000/flask-demo/flask-demo:2.0
+          name: flask-demo
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          #livenessProbe:
+            #httpGet:
+              #path: /health
+              #port: 5000
+              #scheme: HTTP
+            #initialDelaySeconds: 60
+            #timeoutSeconds: 5
+            #successThreshold: 1
+            #failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          ports:
+          - containerPort: 5000
+          volumeMounts:
+          - name: data
+            mountPath: /var/app
+        - image: 192.168.130.1:5000/flask-demo/flask-demo:git-update
+          name: flask-demo-git-update
+          volumeMounts:
+          - name: data
+            mountPath: /var/github
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deploy-flask-demo-service
+  labels:
+    name: deploy-flask-demo-server
+spec:
+  selector:
+    name: deploy-flask-demo
+  type: NodePort
+  ports:
+   - protocol: TCP
+     port: 5000
+     targetPort: 5000
+     nodePort: 32002

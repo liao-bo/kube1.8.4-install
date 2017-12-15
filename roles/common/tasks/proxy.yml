@@ -1,0 +1,10 @@
+---
+- name: proxy script
+  template: 
+    src: proxy_script.j2
+    dest: /tmp/g
+    owner: root 
+    group: root 
+    mode: 0744
+  notify:
+    - install proxy

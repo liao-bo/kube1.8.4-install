@@ -1,0 +1,3 @@
+---
+- import_tasks: "kubernetes_node_{{ install_or_uninstall }}.yml"
+  tags: kubernetes_node

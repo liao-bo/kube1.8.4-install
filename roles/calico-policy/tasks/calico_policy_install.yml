@@ -1,0 +1,20 @@
+---
+- name: create calico-policy-controller yaml dir
+  file:
+    path: /var/tmp/calico-policy-controller
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: sync calico-policy-controller yaml
+  template: 
+    src: "{{ item.src }}"
+    dest: /var/tmp/calico-policy-controller/{{ item.dest }}
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { src: 'policy-controller.yaml', dest: 'policy-controller.yaml' }
+    - { src: 'rbac.yaml', dest: 'rbac.yaml' }
+  notify: apply calico-policy-controller

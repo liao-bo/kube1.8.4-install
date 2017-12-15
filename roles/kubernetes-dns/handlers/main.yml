@@ -1,0 +1,3 @@
+---
+- name: apply kube-dns
+  shell: kubectl apply -f /var/tmp/kube-dns/kube-dns.yaml

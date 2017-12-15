@@ -1,0 +1,17 @@
+---
+- name: create kube-dns yaml dir
+  file:
+    path: /var/tmp/kube-dns
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: sync kube-dns yaml
+  template: 
+    src: kube-dns.yaml
+    dest: /var/tmp/kube-dns/kube-dns.yaml
+    owner: root
+    group: root
+    mode: 0644
+  notify: apply kube-dns

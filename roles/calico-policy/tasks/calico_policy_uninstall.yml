@@ -1,0 +1,22 @@
+---
+- name: check calico-policy-controller 
+  shell: kubectl --namespace=kube-system get deployment calico-policy-controller
+  register: policy_result
+  ignore_errors: true
+
+- debug:
+    msg: "{{ policy_result }}"
+
+- name: delete calico-policy-controller containers
+  shell: kubectl delete -f /var/tmp/calico-policy-controller/{{ item }}
+  with_items:
+    - policy-controller.yaml
+    - rbac.yaml
+  async: 10
+  when: policy_result.rc == 0
+  ignore_errors: true
+
+- name: remove calico-policy-controller yaml
+  file:
+    path: /var/tmp/calico-policy-controller
+    state: absent

@@ -1,0 +1,60 @@
+---
+- name: add etcd group
+  group:
+    name: etcd
+    state: present
+
+- name: add etcd user
+  user:
+    name: etcd
+    shell: /sbin/nologin
+    groups: etcd
+    append: yes
+
+- name: download etcd binary
+  unarchive:
+    remote_src: yes
+    src: "{{ etcd_bin_tar_url }}/etcd-v{{ etcd_version }}-linux-amd64.tar.gz"
+    dest: /tmp
+  tags: fetch_etcd_to_tmp
+
+- name: move etcd,etcdctl to PATH
+  copy:
+    remote_src: yes
+    src: /tmp/etcd-v{{ etcd_version }}-linux-amd64/{{ item }}
+    dest: /usr/bin
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - etcd
+    - etcdctl
+
+- name: create etcd data directory
+  file:
+    path: /opt/etcd
+    state: directory
+    owner: etcd
+    group: etcd
+    mode: 0755
+
+- name: create /lib/systemd/system/etcd.service
+  copy:
+    src: etcd.service
+    dest: /lib/systemd/system/etcd.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: /etc/etcd/etcd.conf
+  template: 
+    src: etcd.conf.j2 
+    dest: /etc/etcd/etcd.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart etcd

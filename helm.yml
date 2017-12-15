@@ -1,0 +1,8 @@
+---
+- hosts: 
+    - helm-client
+  roles:
+    - kubernetes-client
+    - helm
+  vars_files: 
+    - dev/group_vars/all

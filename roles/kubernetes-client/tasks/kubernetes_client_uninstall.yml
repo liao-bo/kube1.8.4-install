@@ -1,0 +1,10 @@
+---
+- name: remove kubectl
+  file:
+    path: /usr/bin/kubectl
+    state: absent
+
+- name: remove kubectl config
+  file:
+    path: /home/{{ ansible_ssh_user }}/.kube/config
+    state: absent

@@ -1,0 +1,17 @@
+---
+- name: fetch calicoctl binary to PATH(/usr/bin)
+  get_url:
+    url: "{{ calico_cni_binary_url }}/calicoctl"
+    dest: /usr/bin
+    owner: root
+    group: root
+    mode: 0755
+
+- name: sync calico_ipv4pool_cidr.yaml
+  template:
+    src: calico_ipv4pool_cidr.yaml
+    dest: /var/tmp/calico_ipv4pool_cidr.yaml
+    owner: root
+    group: root
+    mode: 0644
+  notify: add calico-k8s-network

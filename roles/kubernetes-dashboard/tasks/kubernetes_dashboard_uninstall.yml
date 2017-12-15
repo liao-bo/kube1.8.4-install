@@ -1,0 +1,24 @@
+---
+- name: check k8s-dashboard
+  shell: kubectl --namespace=kube-system get deployment kubernetes-dashboard
+  register: policy_result
+  ignore_errors: true
+
+- debug:
+    msg: "{{ policy_result }}"
+
+- name: delete k8s-dashboard containers
+  shell: kubectl delete -f /var/tmp/k8s-dashboard/{{ item }}
+  with_items:
+    - heapster-rbac.yaml
+    - heapster.yaml
+    - influxdb.yaml
+    - grafana.yaml
+    - kubernetes-dashboard.yaml
+  when: policy_result.rc == 0
+  ignore_errors: true
+
+- name: remove k8s-dashboard yaml
+  file:
+    path: /var/tmp/k8s-dashboard
+    state: absent

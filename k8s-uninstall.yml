@@ -1,0 +1,11 @@
+---
+- import_playbook: kubernetes-ingress.yml
+- import_playbook: kubernetes-dns.yml
+- import_playbook: kubernetes-dashboard.yml
+- import_playbook: calico-policy.yml
+- import_playbook: calico.yml
+- import_playbook: kubernetes-master.yml
+- import_playbook: kubernetes-node.yml
+- import_playbook: docker.yml
+- import_playbook: etcd.yml
+- import_playbook: ntp.yml

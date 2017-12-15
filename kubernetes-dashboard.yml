@@ -1,0 +1,8 @@
+---
+- name: kubernetes-dashboard
+  hosts: 
+    - kubernetes-master
+  roles:
+    - kubernetes-dashboard
+  vars_files:
+    - dev/group_vars/all

@@ -1,0 +1,6 @@
+---
+- name: apply calico-policy-controller
+  shell: kubectl apply -f /var/tmp/calico-policy-controller/{{ item }}
+  with_items:
+    - policy-controller.yaml
+    - rbac.yaml

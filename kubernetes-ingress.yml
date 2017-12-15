@@ -1,0 +1,8 @@
+---
+- name: kubernetes-ingress
+  hosts: 
+    - kubernetes-master
+  roles:
+    - kubernetes-ingress
+  vars_files:
+    - dev/group_vars/all

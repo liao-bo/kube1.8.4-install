@@ -1,0 +1,16 @@
+---
+- name: download helm client binary
+  unarchive:
+    remote_src: yes
+    src: "{{ helm_client_tar_url }}/helm-v{{ helm_client_version }}-linux-amd64.tar.gz"
+    dest: /tmp
+  tags: fetch_helm_client_to_tmp
+
+- name: move helm to PATH
+  copy:
+    remote_src: yes
+    src: /tmp/linux-amd64/helm
+    dest: /usr/local/bin/helm
+    owner: root
+    group: root
+    mode: 0755

@@ -1,0 +1,19 @@
+---
+- name: check kube-dns
+  shell: kubectl --namespace=kube-system get deployment kube-dns
+  register: policy_result
+  ignore_errors: true
+
+- debug:
+    msg: "{{ policy_result }}"
+
+- name: delete kube-dns containers
+  shell: kubectl delete -f /var/tmp/kube-dns/kube-dns.yaml
+  async: 10
+  when: policy_result.rc == 0
+  ignore_errors: true
+
+- name: remove kube-dns yaml
+  file:
+    path: /var/tmp/kube-dns
+    state: absent

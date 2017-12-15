@@ -1,0 +1,9 @@
+---
+- name: check helm pod
+  shell: "kubectl get pod -n kube-system|grep tiller"
+  register: command_result
+  ignore_errors: True
+
+- name: helm init
+  command: "helm init --upgrade -i {{ helm_tiller_image }} --stable-repo-url {{ helm_registry }}"
+  when: command_result.stdout.find('Running') == -1

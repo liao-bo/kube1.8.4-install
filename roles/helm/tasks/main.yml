@@ -1,0 +1,4 @@
+- import_tasks: helm-client_install.yml
+  tags: helm-client
+- import_tasks: helm-tiller_install.yml
+  tags: helm-tiller

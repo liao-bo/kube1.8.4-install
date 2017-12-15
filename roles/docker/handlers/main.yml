@@ -1,0 +1,10 @@
+---
+- name: restart docker
+  service: 
+    name: docker 
+    state: restarted
+    enabled: yes
+
+- name: add CA to trust lists
+  shell: "cat /tmp/root.crt >>/etc/pki/tls/certs/ca-bundle.crt"
+

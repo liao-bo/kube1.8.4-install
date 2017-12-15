@@ -1,0 +1,9 @@
+---
+- name: etcd
+  hosts: 
+    - kubernetes-master
+    #- kubernetes-node
+  roles:
+    - etcd
+  vars_files:
+    - dev/group_vars/all

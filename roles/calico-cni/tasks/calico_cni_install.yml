@@ -1,0 +1,34 @@
+---
+- name: create cni plugin directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - /opt/cni/bin
+    - /etc/cni/net.d
+
+- name: fetch calico,calico-ipam,loopback binary to PATH(/opt/cni/bin)
+  get_url:
+    url: "{{ calico_cni_binary_url }}/{{ item }}"
+    dest: /opt/cni/bin
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - calico
+    - calico-ipam
+    - loopback
+
+- name: create calico configuration
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { src: '10-calico.conf.j2', dest: '/etc/cni/net.d/10-calico.conf' }
+  notify: restart kubelet

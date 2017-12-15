@@ -1,0 +1,7 @@
+---
+- hosts: 
+    - kubernetes-master
+  roles:
+    - calico-policy
+  vars_files: 
+    - dev/group_vars/all

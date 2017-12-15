@@ -1,0 +1,23 @@
+---
+- name: stop kubernetes-node 
+  service: 
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  with_items: 
+    - kubelet
+    - kube-proxy
+  ignore_errors: true
+
+- name: remove kubernetes-node directories & configurations
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /usr/bin/kubelet
+    - /usr/bin/kube-proxy
+    - /etc/kubernetes
+    - /var/lib/kubelet
+    - /var/run/kubernetes
+    - /lib/systemd/system/kubelet.service
+    - /lib/systemd/system/kube-proxy.service

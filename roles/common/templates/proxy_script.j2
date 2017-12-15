@@ -1,0 +1,64 @@
+#!/bin/bash
+mkdir /root/.pip
+
+(
+cat <<EOF
+[global]
+index-url = http://nexus.wanda-itg.local/repository/pypi-all/simple
+trusted-host = nexus.wanda-itg.local
+EOF
+) >/root/.pip/pip.conf
+
+
+
+
+(
+cat <<EOF
+[easy_install]
+index-url = http://nexus.wanda-itg.local/repository/pypi-all/simple
+EOF
+) >/root/.pydistutils.cfg
+
+
+yum install python-setuptools gcc unzip -y
+easy_install pip
+pip install shadowsocks
+
+(
+cat <<EOF
+{
+    "server":"10.214.168.207",
+    "server_port":8088,
+    "local_address": "127.0.0.1",
+    "local_port":1080,
+    "password":"anya520",
+    "timeout":300,
+    "method":"aes-256-cfb",
+    "fast_open": false
+}
+EOF
+) >/etc/ss-local.json
+
+
+nohup sslocal -c /etc/ss-local.json &>> /var/log/ss-local.log &
+
+
+
+wget  -O /root/proxychains-master.zip http://10.214.124.68/linux-softwares/proxychains-master.zip 
+cd /root/
+unzip proxychains-master.zip
+
+cd /root/proxychains-master
+./configure
+make
+make install
+
+
+
+
+sed -i '96s/.*/socks5  127.0.0.1 1080/' /root/proxychains-master/src/proxychains.conf
+
+cd /root/proxychains-master/src
+proxychains4 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+mv /etc/yum.repos.d/rhel7.repo /etc/yum.repos.d/rhel7.repo.bak
+proxychains4 yum makecache
